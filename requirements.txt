@@ -1,0 +1,9 @@
+prefect==3.1.13
+psycopg2==2.9.7
+asyncpg
+fastapi
+uvicorn
+pydantic>=1.10  
+griffe>=0.49.0,<2.0.0  
+apprise==1.4.0
+anyio>=3.6

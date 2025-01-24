@@ -1,0 +1,35 @@
+name: etl-flow
+description: ETL Flow Deployment
+version: 1.0
+flow: etl-flow.py:etl_flow
+work_pool:
+  name: docker-pool
+  type: process
+  tags:
+    - ETL
+    - production
+storage:
+  type: local
+  path: /app/prefect  
+parameters:
+  start_date: '2025-01-01'
+  end_date: '2025-01-31'
+deployments:
+  - name: etl-flow-deployment
+    description: Executes ETL Flow every 8 hours.
+    entrypoint: etl-flow.py:etl_flow
+    work_pool:
+      name: docker-pool
+      type: process
+      work_queue_name: default  
+    schedule:
+      interval: 28800
+  - name: payment-insertion-deployment
+    description:  Executes Payment Insertion Flow every night.
+    entrypoint: payment_insertion_flow.py:payment_insertion_flow
+    work_pool:
+      name: docker-pool
+      type: process
+      work_queue_name: default
+    schedules:
+      - cron: "0 2 * * *"  

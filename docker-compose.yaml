@@ -1,0 +1,42 @@
+services:
+  app:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    container_name: teknasyon-container
+    ports:
+      - "8081:8080"  
+      - "4200:4200"  
+    restart: "no" 
+    environment:
+      PREFECT_HOME: /app/prefect  
+    volumes:
+      - app_data:/app/prefect  
+    depends_on:
+      - db
+    networks:
+      - telco_network  
+
+  db:
+    image: postgres:14
+    container_name: postgres_db
+    ports:
+      - "6000:5432"
+    environment:
+      POSTGRES_USER: root
+      POSTGRES_PASSWORD: root
+      POSTGRES_DB: mydatabase
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+    networks:
+      - telco_network  
+  
+networks:
+  telco_network:
+    external: true  
+    name: teknasyon-case-de-main_telco_network 
+
+volumes:
+  postgres_data:
+  app_data:
+
